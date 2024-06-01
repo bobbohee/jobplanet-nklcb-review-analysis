@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
+import csv
 import time
 
 
@@ -16,8 +17,8 @@ driver.get('https://www.jobplanet.co.kr/users/sign_in')
 
 time.sleep(1)
 
-driver.find_element(By.XPATH, '//*[@id="user_email"]').send_keys('** 이메일 입력 **')
-driver.find_element(By.XPATH, '//*[@id="user_password"]').send_keys('** 비밀번호 입력 **')
+driver.find_element(By.XPATH, '//*[@id="user_email"]').send_keys('** 이메일 **')
+driver.find_element(By.XPATH, '//*[@id="user_password"]').send_keys('** 비밀번호 **')
 driver.find_element(By.XPATH, '//*[@id="signInSignInCon"]/div[2]/div/section[3]/fieldset/button').click()
 
 time.sleep(1)
@@ -30,10 +31,12 @@ company = {
     '카카오': 93880,
     '라인': 89255,
     '쿠팡': 87444,
-    '배달의 민족': 61420,
+    '배달의민족': 61420,
 }
 
-for company_id in company.values():
+for company_name, company_id in company.items():
+    data = []
+
     for page in range(1, 101):
         try:
             driver.get(url.format(company_id=company_id, page=page))
@@ -45,8 +48,18 @@ for company_id in company.values():
 
             for review in driver.find_elements(By.CLASS_NAME, 'video_ad_content'):
                 title = review.find_element(By.CLASS_NAME, 'us_label').text
-                [merit, disadvantages, tit] = review.find_element(By.CLASS_NAME, 'tc_list').find_elements(By.CLASS_NAME, 'df1')
-                merit = merit.text
-                disadvantages = disadvantages.text
+                [pros, cons, wish] = review.find_element(By.CLASS_NAME, 'tc_list').find_elements(By.CLASS_NAME, 'df1')
+                pros = pros.text
+                cons = cons.text
+                data.append([title, pros, cons])
         except Exception as e:
             print(e.args[0])
+
+    with open('잡플래닛_리뷰_%s.csv' % company_name, mode='w', encoding='utf-8', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['title', 'pros', 'cons'])
+        for row in data:
+            try:
+                writer.writerow(row)
+            except Exception as e:
+                print(e.args[0], data)
