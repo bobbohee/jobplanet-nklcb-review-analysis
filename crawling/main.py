@@ -45,7 +45,8 @@ for company_id in company.values():
 
             for review in driver.find_elements(By.CLASS_NAME, 'video_ad_content'):
                 title = review.find_element(By.CLASS_NAME, 'us_label').text
-                pros = review.find_element(By.XPATH, '//*[@id="viewReviewsList"]/div/div/div/section[2]/div/div[2]/div/dl/dd[1]/span').text
-                cons = review.find_element(By.XPATH, '//*[@id="viewReviewsList"]/div/div/div/section[2]/div/div[2]/div/dl/dd[2]/span').text
+                [merit, disadvantages, tit] = review.find_element(By.CLASS_NAME, 'tc_list').find_elements(By.CLASS_NAME, 'df1')
+                merit = merit.text
+                disadvantages = disadvantages.text
         except Exception as e:
             print(e.args[0])
