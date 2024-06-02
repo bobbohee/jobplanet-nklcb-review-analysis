@@ -57,14 +57,13 @@ read_data <- function(company_name) {
 read_combine_data <- function(company_name) {
   review <- read_data(company_name)
   
-  review <- review %>%
-    summarise(
-      pros = paste(pros, collapse = ' '),
-      cons = paste(cons, collapse = ' ')
-    )
+  review <- review %>% summarise(
+    pros = paste(pros, collapse = ' '),
+    cons = paste(cons, collapse = ' '))
   
-  review <- raw_review %>% 
-    mutate(company = company_name)
+  review <- review %>% mutate(company = company_name)
+  
+  return(review)
 }
 
 
@@ -77,9 +76,9 @@ clean_data <- function(review, col_name) {
 # 4.1. 한글을 제외한 문자 제거 -------------------------------------------------
   reg_exp <- '[^가-힣]'
   review <- review %>% mutate(!!sym(col_name) := str_replace_all(!!sym(col_name), reg_exp, ' '),
-                                  !!sym(col_name) := str_squish(!!sym(col_name)))
-  
-  
+                              !!sym(col_name) := str_squish(!!sym(col_name)))
+
+
 # 4.2. 단어 통일 ---------------------------------------------------------------
   review <- review %>% mutate(
     !!sym(col_name) := !!sym(col_name) %>% 
@@ -114,28 +113,17 @@ clean_data <- function(review, col_name) {
       str_replace_all('코드 리뷰', '코드리뷰') %>%  
       str_replace_all('특근비|야근수당', '야근비')  
   )
-  
-  
+
+
 # 4.3. 불용어 제거 -------------------------------------------------------------
   review <- review %>% mutate(
     !!sym(col_name) := !!sym(col_name) %>% 
       str_replace_all('극강|대한민국|소소한|준수|보통|대상|특면|좋은거|채널|감성|분단|자잘|년|대한민국|소소한', '') %>% 
       str_replace_all('로운|들이|하기|가지|등등|이긴|이지만|이겠지만|겠지만|지만|라고|이긴한데|이나|이다보니|이니|인거|하지만|들과|극강|지려|을|를|하다|하는건', ''))
-  
-  
+
+
 # 4.4. 명사를 기준으로 토큰화 --------------------------------------------------
   review <- review %>% unnest_tokens(input = !!sym(col_name), output = word, token = extractNoun)
 
-  return(review)
-}
-
-
-
-# ------------------------------------------------------------------------------
-# 5. 데이터 전처리가 완료된 데이터 불러오기
-# ------------------------------------------------------------------------------
-get_data <- function(company_name, col_name) {
-  review <- read_data(company_name)
-  review <- clean_data(review, col_name)
   return(review)
 }
