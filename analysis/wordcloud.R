@@ -32,7 +32,7 @@ get_data <- function(company_name, col_name) {
 create_wordcloud <- function(review, low_color, high_color) {
   ggplot(review, aes(label = word, size = n, col = n)) +
     geom_text_wordcloud(seed = 1234, family = 'blackhansans') + 
-    scale_radius(limits = c(10, NA), range = c(5, 40)) +
+    scale_radius(limits = c(10, NA), range = c(5, 30)) +
     scale_color_gradient(low = low_color, high = high_color) +
     theme_minimal()
 }
@@ -61,6 +61,7 @@ wordcloud_pros('kakao')
 wordcloud_pros('line')
 wordcloud_pros('coupang')
 wordcloud_pros('baemin')
+wordcloud_pros('nklcb')
 
 
 # 4.2. 단점 워드 클라우드 ------------------------------------------------------
@@ -69,3 +70,4 @@ wordcloud_cons('kakao')
 wordcloud_cons('line')
 wordcloud_cons('coupang')
 wordcloud_cons('baemin')
+wordcloud_cons('nklcb')

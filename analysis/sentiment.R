@@ -55,7 +55,7 @@ create_sentiment <- function(review) {
     geom_text(aes(label = n), hjust = -0.3) +
     scale_y_continuous(expand = expansion(mult = c(0.05, 0.15))) +
     scale_fill_manual(values = c('neg' = '#ff3333', 'pos' = '#0091ff')) +
-    labs(x = NULL)
+    labs(x = NULL, y = NULL)
 }
 
 
@@ -82,6 +82,7 @@ sentiment_pros('kakao')
 sentiment_pros('line')
 sentiment_pros('coupang')
 sentiment_pros('baemin')
+sentiment_pros('nklcb')
 
 
 # 4.2. 장점 감성 분석 ----------------------------------------------------------
@@ -90,3 +91,4 @@ sentiment_cons('kakao')
 sentiment_cons('line')
 sentiment_cons('coupang')
 sentiment_cons('baemin')
+sentiment_cons('nklcb')

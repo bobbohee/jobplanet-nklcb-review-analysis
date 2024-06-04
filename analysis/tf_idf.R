@@ -48,7 +48,8 @@ create_tf_idf <- function(review, company_name, fill_color) {
 
   ggplot(top10, aes(x = reorder(word, tf_idf), y = tf_idf, fill = fill_color)) +
     geom_col(fill = fill_color) +
-    coord_flip()  
+    coord_flip() +
+    labs(x = NULL, y = NULL)
 }
 
 
